@@ -1,32 +1,25 @@
+import os
+from dotenv import load_dotenv
 from fastapi import FastAPI, HTTPException
-from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 import mysql.connector
 import google.generativeai as genai
 import json
 
-app = FastAPI()
+# 1. Carrega as variáveis do arquivo .env
+load_dotenv()
 
-# Permite chamadas do front-end (XAMPP) para a API do FastAPI.
-# Ajuste as origens depois para ficar mais restrito se necessário.
-app.add_middleware(
-    CORSMiddleware,
-    allow_origins=["http://localhost", "http://localhost:80", "http://127.0.0.1", "http://127.0.0.1:80", "*"],
-    allow_credentials=True,
-    allow_methods=["*"],
-    allow_headers=["*"],
-)
+# 2. Puxa a chave de forma segura
+GOOGLE_API_KEY = os.getenv("GEMINI_API_KEY")
 
-# Configura a API do Gemini com a sua chave gratuita
-# Dica: coloque a chave real na variável de ambiente GOOGLE_API_KEY.
-# Exemplo (Windows PowerShell): setx GOOGLE_API_KEY "SUA_CHAVE_REAL"
-import os
+# Pequena trava de segurança para te avisar se o arquivo .env estiver vazio ou não for encontrado
+if not GOOGLE_API_KEY:
+    raise ValueError("Chave da API não encontrada! Verifique seu arquivo .env")
 
-GOOGLE_API_KEY = os.getenv("GOOGLE_API_KEY", "CHAVE_REMOVIDA_POR_SEGURANCA")
-if not GOOGLE_API_KEY or GOOGLE_API_KEY == "CHAVE_REMOVIDA_POR_SEGURANCA":
-    print("AVISO: GOOGLE_API_KEY não está configurada (placeholder no código).")
-
+# 3. Configura a API do Gemini
 genai.configure(api_key=GOOGLE_API_KEY)
+
+app = FastAPI()
 
 # Modelo para receber a requisição do Front-End (HTML/JS)
 class MessageRequest(BaseModel):
@@ -56,7 +49,7 @@ def get_product_specs(product_id: int):
 @app.post("/api/tio-claudio/chat")
 async def chat_tio_claudio(payload: MessageRequest):
     
-    # 1. Definindo a personalidade marcante do Tio Cláudio
+    # Definindo a personalidade marcante do Tio Cláudio
     system_instruction = (
         "Você é o 'Tio Cláudio', um técnico de informática veterano com mais de 20 anos de experiência, "
         "especialista em hardware e assistente virtual do marketplace TecHubby. Você é muito prestativo, "
@@ -66,7 +59,7 @@ async def chat_tio_claudio(payload: MessageRequest):
         "alerte-o imediatamente com bom humor e explique o motivo técnico."
     )
     
-    # 2. Injeta o contexto do produto se o usuário estiver em uma página de produto
+    # Injeta o contexto do produto se o usuário estiver em uma página de produto
     if payload.product_id:
         product_info = get_product_specs(payload.product_id)
         if product_info:
@@ -78,13 +71,13 @@ async def chat_tio_claudio(payload: MessageRequest):
             )
 
     try:
-        # 3. Inicializa o modelo do Gemini aplicando as instruções de sistema (personalidade)
+        # Inicializa o modelo do Gemini aplicando as instruções de sistema (personalidade)
         model = genai.GenerativeModel(
             model_name="gemini-1.5-flash",
             system_instruction=system_instruction
         )
         
-        # 4. Envia a mensagem do usuário e recebe a resposta da IA
+        # Envia a mensagem do usuário e recebe a resposta da IA
         response = model.generate_content(payload.message)
         
         return {"reply": response.text}
