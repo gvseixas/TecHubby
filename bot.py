@@ -3,31 +3,28 @@ from dotenv import load_dotenv
 from fastapi import FastAPI, HTTPException
 from pydantic import BaseModel
 import mysql.connector
-import google.generativeai as genai
+from google import genai
 import json
 
-# 1. Carrega as variáveis do arquivo .env
+# Carrega as variáveis do arquivo .env
 load_dotenv()
 
-# 2. Puxa a chave de forma segura
+# Puxa a chave de forma segura
 GOOGLE_API_KEY = os.getenv("GEMINI_API_KEY")
 
-# Pequena trava de segurança para te avisar se o arquivo .env estiver vazio ou não for encontrado
 if not GOOGLE_API_KEY:
     raise ValueError("Chave da API não encontrada! Verifique seu arquivo .env")
 
-# 3. Configura a API do Gemini
-genai.configure(api_key=GOOGLE_API_KEY)
+# Configura o NOVO cliente da API do Gemini
+client = genai.Client(api_key=GOOGLE_API_KEY)
 
 app = FastAPI()
 
-# Modelo para receber a requisição do Front-End (HTML/JS)
 class MessageRequest(BaseModel):
     user_id: int
     message: str
-    product_id: int = None # Opcional: ID do hardware que o usuário está olhando
+    product_id: int = None
 
-# Função para buscar especificações do produto no MySQL
 def get_product_specs(product_id: int):
     try:
         conn = mysql.connector.connect(
@@ -49,17 +46,15 @@ def get_product_specs(product_id: int):
 @app.post("/api/tio-claudio/chat")
 async def chat_tio_claudio(payload: MessageRequest):
     
-    # Definindo a personalidade marcante do Tio Cláudio
     system_instruction = (
         "Você é o 'Tio Cláudio', um técnico de informática veterano com mais de 20 anos de experiência, "
         "especialista em hardware e assistente virtual do marketplace TecHubby. Você é muito prestativo, "
         "tem um tom levemente informal (como aquele seu tio gente boa que entende tudo de computadores), "
         "usa algumas gírias de tecnologia, mas é extremamente rigoroso com compatibilidade de peças. "
-        "Se o cliente tentar combinar peças incompatíveis (ex: processador AMD em placa-mãe Intel, ou memória DDR4 em slot DDR5), "
+        "Se o cliente tentar combinar peças incompatíveis (ex: processador AMD em placa-mãe Intel), "
         "alerte-o imediatamente com bom humor e explique o motivo técnico."
     )
     
-    # Injeta o contexto do produto se o usuário estiver em uma página de produto
     if payload.product_id:
         product_info = get_product_specs(payload.product_id)
         if product_info:
@@ -67,18 +62,17 @@ async def chat_tio_claudio(payload: MessageRequest):
             system_instruction += (
                 f"\n\nContexto Atual: O usuário está olhando o produto '{product_info['nome']}'. "
                 f"As especificações técnicas dele vindas do banco de dados são: {specs_str}. "
-                f"Use esses dados para responder dúvidas de compatibilidade caso o usuário pergunte algo relacionado."
             )
 
     try:
-        # Inicializa o modelo do Gemini aplicando as instruções de sistema (personalidade)
-        model = genai.GenerativeModel(
-            model_name="gemini-1.5-flash",
-            system_instruction=system_instruction
+        # Novo formato de envio do Google GenAI
+        response = client.models.generate_content(
+            model='gemini-2.5-flash',
+            contents=payload.message,
+            config=genai.types.GenerateContentConfig(
+                system_instruction=system_instruction,
+            )
         )
-        
-        # Envia a mensagem do usuário e recebe a resposta da IA
-        response = model.generate_content(payload.message)
         
         return {"reply": response.text}
 
@@ -87,5 +81,4 @@ async def chat_tio_claudio(payload: MessageRequest):
 
 if __name__ == "__main__":
     import uvicorn
-    # Roda o servidor local na porta 8000
-    uvicorn.run(app, host="0.0.0.0", port=8000)
+    uvicorn.run(app, host="0.0.0.0", port=8080)
