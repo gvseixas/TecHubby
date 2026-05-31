@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="../css/EstiloGeral.css">
+    <link rel="stylesheet" href="../css/EstiloBot.css">
+    <link rel="shortcut icon" href="../imagens/favicon.svg" type="image/x-icon">
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css'rel='stylesheet'> 
+    <title>Tio Cláudio — TecHubby</title>
+</head>
+<body>
+    <header class="nav_bar">
+        <nav class="logo">
+            <a href="../index.html">
+                <img src="../imagens/logo.svg" alt="Logo do TecHub">
+            </a>
+        </nav>
+
+        <nav class="barra_pesquisa">
+            <i class='bx bx-search'></i>
+            <input type="text" placeholder="Buscar produtos, componentes...">
+        </nav>
+
+        <nav>
+            <ul class="menu_lateral">
+                <li class="menu_item">
+                    <a href="" class="nav_icon" aria-label="Carrinho">
+                        <i class='bx bx-cart'></i>
+                        <span class="cart_badge">0</span>
+                    </a>
+                </li>
+                <li class="menu_item">
+                    <a href="paginas/conta.html" class="btn">
+                        <i class='bx bxs-user'></i>
+                        <span>Conta</span>
+                    </a>
+                </li>
+            </ul>
+        </nav>
+    </header>
+    <main class="chat-main">
+        <div class="chat-container">
+            <div class="chat-header">
+                <div class="avatar">👨‍🔧</div>
+                <div class="header-info">
+                    <h2>Tio Cláudio</h2>
+                    <p>● Online (Especialista em Hardware)</p>
+                </div>
+            </div>
+            <div class="chat-messages" id="chat-messages">
+                <div class="message bot">
+                    Fala, meu nobre! Sou o Tio Cláudio. Tá na dúvida se aquela placa de vídeo cabe na sua placa-mãe ou se a fonte vai aguentar o tranco? Manda a dúvida aí!
+                </div>
+            </div>
+            <div class="chat-input-area">
+                <input type="text" id="chat-input" placeholder="Pergunte algo sobre hardware..." autocomplete="off">
+                <button id="send-btn" onclick="enviarMensagem()">Enviar</button>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        const chatMessages = document.getElementById('chat-messages');
+        const chatInput = document.getElementById('chat-input');
+        const sendBtn = document.getElementById('send-btn');
+
+        // Escuta o botão 'Enter' no teclado para enviar a mensagem
+        chatInput.addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                enviarMensagem();
+            }
+        });
+
+        // Função responsável por gerenciar o fluxo de envio e resposta
+        async function enviarMensagem() {
+            const messageText = chatInput.value.trim();
+            if (!messageText) return;
+
+            // 1. Desabilita o campo e o botão enquanto a IA pensa
+            chatInput.disabled = true;
+            sendBtn.disabled = true;
+
+            // 2. Adiciona a mensagem do usuário na tela
+            appendMessage(messageText, 'user');
+            chatInput.value = '';
+
+            // 3. Adiciona um balão temporário de "digitando..."
+            const typingBubble = appendMessage('Tio Cláudio está analisando o setup...', 'bot');
+
+            try {
+                // 4. Faz a requisição AJAX (Fetch) para o seu microsserviço Python/Gemini
+                const response = await fetch('http://localhost:8000/api/tio-claudio/chat', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        user_id: 1, // ID estático para teste
+                        message: messageText,
+                        product_id: 1 // ID do produto simulado (ex: uma placa-mãe do seu banco)
+                    })
+                });
+
+                if (!response.ok) {
+                    throw new Error('Erro na resposta do servidor.');
+                }
+
+                const data = await response.json();
+
+                // 5. Remove o balão de carregamento e insere a resposta real do Tio Cláudio
+                typingBubble.remove();
+                appendMessage(data.reply, 'bot');
+
+            } catch (error) {
+                console.error(error);
+                typingBubble.remove();
+                appendMessage('Deu ruim aqui no meu circuito! Tenta mandar de novo, chefe.', 'bot');
+            } finally {
+                // 6. Reativa os campos para a próxima pergunta
+                chatInput.disabled = false;
+                sendBtn.disabled = false;
+                chatInput.focus();
+            }
+        }
+
+        // Função auxiliar para renderizar as mensagens na tela
+        function appendMessage(text, sender) {
+            const messageDiv = document.createElement('div');
+            messageDiv.classList.add('message', sender);
+            messageDiv.innerText = text;
+            chatMessages.appendChild(messageDiv);
+            
+            // Faz o scroll automático para a última mensagem
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+            
+            return messageDiv;
+        }
+    </script>
+</body>
+</html>
