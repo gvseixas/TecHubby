@@ -1,4 +1,5 @@
 from fastapi import FastAPI, HTTPException
+from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 import mysql.connector
 import google.generativeai as genai
@@ -6,8 +7,25 @@ import json
 
 app = FastAPI()
 
+# Permite chamadas do front-end (XAMPP) para a API do FastAPI.
+# Ajuste as origens depois para ficar mais restrito se necessário.
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["http://localhost", "http://localhost:80", "http://127.0.0.1", "http://127.0.0.1:80", "*"],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+
 # Configura a API do Gemini com a sua chave gratuita
-GOOGLE_API_KEY = "CHAVE_REMOVIDA_POR_SEGURANCA"
+# Dica: coloque a chave real na variável de ambiente GOOGLE_API_KEY.
+# Exemplo (Windows PowerShell): setx GOOGLE_API_KEY "SUA_CHAVE_REAL"
+import os
+
+GOOGLE_API_KEY = os.getenv("GOOGLE_API_KEY", "CHAVE_REMOVIDA_POR_SEGURANCA")
+if not GOOGLE_API_KEY or GOOGLE_API_KEY == "CHAVE_REMOVIDA_POR_SEGURANCA":
+    print("AVISO: GOOGLE_API_KEY não está configurada (placeholder no código).")
+
 genai.configure(api_key=GOOGLE_API_KEY)
 
 # Modelo para receber a requisição do Front-End (HTML/JS)
