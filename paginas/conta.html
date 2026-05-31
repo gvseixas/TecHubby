@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Conta — TecHubby</title>
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css'rel='stylesheet'> 
+    <link rel="stylesheet" href="../css/EstiloGeral.css">
+    <link rel="stylesheet" href="../css/EstiloConta.css">
+    <link rel="shortcut icon" href="../imagens/favicon.svg" type="image/x-icon">
+</head>
+<body>
+    <header class="nav_bar">
+        <nav class="logo">
+            <a href="../index.html">
+                <img src="../imagens/logo.svg" alt="Logo do TecHub">
+            </a>
+        </nav>
+
+        <nav class="barra_pesquisa">
+            <i class='bx bx-search'></i>
+            <input type="text" placeholder="Buscar produtos, componentes...">
+        </nav>
+
+        <nav>
+            <ul class="menu_lateral">
+                <li class="menu_item">
+                    <a href="" class="nav_icon" aria-label="Carrinho">
+                        <i class='bx bx-cart'></i>
+                        <span class="cart_badge">0</span>
+                    </a>
+                </li>
+                <li class="menu_item">
+                    <a href="paginas/conta.html" class="btn">
+                        <i class='bx bxs-user'></i>
+                        <span>Conta</span>
+                    </a>
+                </li>
+            </ul>
+        </nav>
+    </header>
+    <main class="container_geral">
+        <form class="container_body">
+            <div class="container">
+                <h1>Login</h1>
+
+                <div class="input_box">
+                    <input type="email" placeholder="Usuário">
+                    <i class="bx bxs-user"></i>
+                </div>
+
+                <div class="input_box">
+                    <input type="password" placeholder="senha">
+                    <i class="bx bxs-lock-alt"></i>
+                </div>
+
+                <div class="lembrar_senha">
+                    <label for="">
+                        <input type="checkbox">
+                        Lembrar senha
+                    </label>
+                </div>
+
+                <button type="submit" class="btn botao_login">Login</button>
+
+                <div class="link_registrar">
+                    <p>Não tem uma conta? <a href="cadastrar.html">Cadastre-se</a></p>
+                </div>
+            </div>
+        </form>
+    </main>
+</body>
+</html>
