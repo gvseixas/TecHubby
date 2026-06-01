@@ -31,7 +31,7 @@
                     </a>
                 </li>
                 <li class="menu_item">
-                    <a href="paginas/conta.html" class="btn">
+                    <a href="conta.html" class="btn">
                         <i class='bx bxs-user'></i>
                         <span>Conta</span>
                     </a>
@@ -40,17 +40,17 @@
         </nav>
     </header>
     <main class="container_geral">
-        <form class="container_body">
+        <form class="container_body" action="../php/login.php" method="post">
             <div class="container">
                 <h1>Login</h1>
 
                 <div class="input_box">
-                    <input type="email" placeholder="Usuário">
+                    <input type="email" name="email" placeholder="Usuário" required>
                     <i class="bx bxs-user"></i>
                 </div>
 
                 <div class="input_box">
-                    <input type="password" placeholder="senha">
+                    <input type="password" name="senha" placeholder="senha" required>
                     <i class="bx bxs-lock-alt"></i>
                 </div>
 
