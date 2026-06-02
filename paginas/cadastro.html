@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+    <link rel="stylesheet" href="../css/EstiloGeral.css">
+    <link rel="stylesheet" href="../css/EstiloConta.css">
+    <link rel="shortcut icon" href="../imagens/favicon.svg" type="image/x-icon">
+    <title>Cadastro — TecHubby</title>
+</head>
+<body>
+    <div id="header"></div>
+    <main class="container_geral">
+        <form class="container_body" action="../php/cadastro.php" method="post">
+            <div class="container">
+                <h1>Cadastro</h1>
+
+                <div class="input_box">
+                    <input type="text" name="nome" placeholder="Nome" required>
+                    <i class="bx bxs-user"></i>
+                </div>
+
+
+                <div class="input_box">
+                    <input type="email" name="email" placeholder="Usuário" required>
+                    <i class="bx bxs-user"></i>
+                </div>
+
+                <div class="input_box">
+                    <input type="password" name="senha" placeholder="Senha" required>
+                    <i class="bx bxs-lock-alt"></i>
+                </div>
+
+                <div class="input_box">
+                    <input type="password" name="senha_confirmar" placeholder="Confirmar senha" required>
+                    <i class="bx bxs-lock-alt"></i>
+                </div>
+
+                <button type="submit" class="btn botao_login">Cadastre-se</button>
+
+                <button type="button" class="btn botao_google" aria-label="Entrar com Google">
+                    <i class='bx bxl-google'></i>
+                    Entrar com Google
+                </button>
+
+                <div class="link_registrar">
+                    <p>Já tem uma conta? <a href="conta.html">Faça login</a></p>
+                </div>
+            </div>
+        </form>
+    </main>
+    <script src="/js/header.js"></script>
+</body>
+</html>
+

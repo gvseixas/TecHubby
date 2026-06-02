@@ -1,0 +1,225 @@
+:root {
+/* BACKGROUNDS */
+--bg-primary:#0a0a0a;   /* fundo geral da página */
+--bg-card:#1a1a1a;   /* fundo dos cards de produto */
+--bg-hero:#0d1b2a;   /* azul escuro da hero section */
+--bg-navbar:#0a0a0a;   /* fundo da navbar */
+--bg-footer:#0f0f0f;   /* fundo do footer */
+--bg-input:#141414;   /* fundo da barra de busca */
+--bg-badge:transparent;
+
+/* CORES PRINCIPAIS */
+
+--cyan:#00d4f5;   /* cor de destaque principal */
+--cyan-hover:#00bde0;   /* cyan escurecido para hover */
+--cyan-glow:rgba(0, 212, 245, 0.15); /* brilho sutil cyan */
+
+--white:#ffffff;   /* textos primários */
+--gray-text:#888888;   /* textos secundários */
+--gray-light:#b0b0b0;   /* textos terciários / placeholders */
+--dark-border:#2a2a2a;   /* bordas de cards e divisores */
+--dark-border-hover:#444444; /* borda ao hover nos cards */
+
+/* TIPOGRAFIA */
+
+--font-primary:'Segoe UI', 'Inter', sans-serif;
+--fs-base:16px; /* tamanho base para textos */
+
+/* NAV_BAR */
+
+--navbar-height: 64px;
+
+}
+
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html {
+    scroll-behavior: smooth;
+}
+
+body {
+    background-color: var(--bg-primary);
+    color: var(--white);
+    font-family: var(--font-primary);
+    font-size: var(--fs-base);
+}
+
+a {
+    color: inherit;
+    text-decoration: none;
+}
+
+img {
+    display: block;
+    max-width: 100%;
+}
+
+button {
+    cursor: pointer;
+    border: none;
+    background: none;
+    font-family: var(--font-primary);
+}
+
+ul, ol {
+    list-style: none;
+}
+
+.nav_bar {
+    display: grid;
+    grid-template-columns: auto 1fr auto;
+    align-items: center;
+    min-height: 90px;
+    height: auto;
+    padding: 1rem 2rem;
+}
+
+/* Logo */
+.logo img {
+    width: 350px;
+}
+
+/* Barra de pesquisa */
+.barra_pesquisa {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    background-color: var(--bg-input);
+    border: 1px solid var(--dark-border);
+    border-radius: 8px;
+    padding: 0 16px;
+    height: 40px;
+    transition: border-color 0.15s ease;
+    width: 100%;
+    max-width: 500px;
+    justify-self: center;
+}
+
+
+.barra_pesquisa:focus-within {
+    border-color: var(--cyan);
+}
+
+.barra_pesquisa i {
+    font-size: 18px;
+    color: var(--gray-text);
+    flex-shrink: 0;
+}
+
+.barra_pesquisa input {
+    background: none;
+    border: none;
+    outline: none;
+    color: var(--white);
+    font-size: 14px;
+    font-family: var(--font-primary);
+    width: 100%;
+}
+
+.barra_pesquisa input::placeholder {
+    color: var(--gray-text);
+}
+
+/* Menu lateral */
+.menu_lateral {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    justify-self: end;
+}
+
+/* Ícone carrinho */
+
+.nav_icon {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 30px;
+    color: var(--white);
+    padding: 8px;
+    border-radius: 8px;
+    transition: color 0.15s ease, background-color 0.15s ease;
+}
+
+.nav_icon:hover {
+    color: var(--cyan);
+    background-color: rgba(0, 212, 245, 0.08);
+}
+
+.cart_badge {
+    position: absolute;
+    top: 2px;
+    right: 2px;
+    background-color: var(--cyan);
+    color: #0a0a0a;
+    font-size: 10px;
+    font-weight: 700;
+    width: 16px;
+    height: 16px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* BOTAO */
+.btn {
+    display: inline-block;
+    background-color: var(--cyan);
+    color: #0a0a0a;
+    font-size: var(--fs-base);
+    font-weight: 700;
+    padding: 14px 32px;
+    border-radius: 8px;
+    box-shadow: 0 0 16px rgba(0, 212, 245, 0.4);
+    text-decoration: none;
+    border: none;
+    cursor: pointer;
+    font-family: var(--font-primary);
+    transition: background-color 0.15s ease, transform 0.15s ease;
+    max-width: 100%;
+}
+
+.btn:hover {
+    background-color: var(--cyan-hover);
+    transform: translateY(-2px);
+    box-shadow: 0 0 24px rgba(0, 212, 245, 0.6);
+}
+
+.btn:active {
+    transform: translateY(0);
+}
+
+.btn__avatar {
+    width: 70px;
+    height: 70px;
+    background-color: var(--cyan-glow);
+    border-radius: 50%;
+    display: flex;
+    position: fixed;
+    bottom: 30px;
+    right: 30px;
+    justify-content: center;
+    align-items: center;
+    font-weight: bold;
+    font-size: 20px;
+}
+
+.btn__avatar:hover {
+    background-color: var(--cyan);
+    transform: translateY(-2px);
+    box-shadow: 0 0 24px rgba(0, 212, 245, 0.6);
+}
+
+.btn__avatar:active {
+    transform: translateY(0);
+}
+
+.index__avatar {
+    font-size: 32px;
+}

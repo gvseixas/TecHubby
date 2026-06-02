@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css'rel='stylesheet'> 
+    <link rel="stylesheet" href="../css/EstiloGeral.css">
+    <link rel="stylesheet" href="../css/EstiloConta.css">
+    <link rel="shortcut icon" href="../imagens/favicon.svg" type="image/x-icon">
+    <title>Conta — TecHubby</title>
+</head>
+<body>
+    <div id="header"></div>
+    <main class="container_geral">
+        <form class="container_body" action="../php/login.php" method="post">
+            <div class="container">
+                <h1>Login</h1>
+
+                <div class="input_box">
+                    <input type="email" name="email" placeholder="Usuário" required>
+                    <i class="bx bxs-user"></i>
+                </div>
+
+                <div class="input_box">
+                    <input type="password" name="senha" placeholder="senha" required>
+                    <i class="bx bxs-lock-alt"></i>
+                </div>
+
+                <div class="lembrar_senha">
+                    <label for="">
+                        <input type="checkbox">
+                        Lembrar senha
+                    </label>
+                </div>
+
+                <button type="submit" class="btn botao_login">Login</button>
+
+                <div class="link_registrar">
+                    <p>Não tem uma conta? <a href="cadastrar.html">Cadastre-se</a></p>
+                </div>
+            </div>
+        </form>
+    </main>
+    <script src="/js/header.js"></script>
+</body>
+</html>
